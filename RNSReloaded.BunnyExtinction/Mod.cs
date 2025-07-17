@@ -42,12 +42,20 @@ public unsafe class Mod : IMod {
     private double[] movementSpeeds = { BBQSPEED, BBQSPEED, BBQSPEED, BBQSPEED };
 
     private bool isTakingDamage = false;
+    private int shiraSteelCount = 0;
 
     private static Dictionary<string, IHook<ScriptDelegate>> ScriptHooks = new();
+    private List<string> disableScripts = [
+        "scr_char_set_forcedmarch",
+        "bp_rabbit_queen1_steel_activate"
+    ];
     private List<string> bbqScripts = [
         "scr_diffswitch", // max health
         "scr_player_charspeed_calc",  // speed limit
         "scrbp_movespeed_mult",
+        "ipat_hblade_2",
+        "ipat_bruiser_3_pt2",
+        "ipat_winged_cap",
         "scrbp_erase_radius", // bullet deletion
         "scr_kotracker_draw_timer",  // permadeath
         "scr_kotracker_can_revive",
@@ -56,7 +64,39 @@ public unsafe class Mod : IMod {
         "scr_pattern_deal_damage_ally",
         "scrbp_warning_msg_enrage",
         "scr_hbsflag_check",
+        "scr_player_radius_calc" // hitbox
     ];
+    private List<string> limitHealthScripts = [
+        "scr_diffswitch", // max health
+    ];
+    private List<string> limitSpeedScripts = [
+        "scr_player_charspeed_calc",  // speed limit
+        "scrbp_movespeed_mult",
+        "ipat_hblade_2",
+        "ipat_bruiser_3_pt2",
+        "ipat_winged_cap",
+    ];
+    private List<string> bulletDeletionScripts = [
+        "scrbp_erase_radius", // bullet deletion
+    ];
+    private List<string> permadeathScripts = [
+        "scr_kotracker_draw_timer",  // permadeath
+        "scr_kotracker_can_revive",
+        "scrbp_time_repeating",
+    ];
+    private List<string> invulnScripts = [
+        "scr_player_invuln", // invuln
+        "scr_pattern_deal_damage_ally",
+        "scrbp_warning_msg_enrage",
+        "scr_hbsflag_check",
+    ];
+    private List<string> setHitboxScripts = [
+        "scr_player_radius_calc" // hitbox
+    ];
+    private List<string> steelheartScripts = [
+        "bp_rabbit_queen1_steel_activate" // steelheart compatibility
+    ];
+
 
     public void StartEx(IModLoaderV1 loader, IModConfigV1 modConfig) {
         this.rnsReloadedRef = loader.GetController<IRNSReloaded>()!;
@@ -132,8 +172,12 @@ public unsafe class Mod : IMod {
             { "scrdt_encounter", this.EncounterDetour},
             // max health/speed
             { "scr_diffswitch", this.DiffSwitchDetour},
-            { "scr_player_charspeed_calc", this.SpeedCalcDetour }, 
+            { "scr_player_charspeed_calc", this.SpeedCalcDetour}, 
             { "scrbp_movespeed_mult", this.MovespeedMultDetour},
+            { "ipat_hblade_2", this.Hblade2Detour},
+            { "ipat_bruiser_3_pt2", this.Bruiser3pt2Detour},
+            { "scr_char_set_forcedmarch", this.ForcedmarchDetour},
+            { "ipat_winged_cap", this.WingedCapDetour},
             // bullet deletion
             { "scrbp_erase_radius", this.EraseRadiusDetour },
             // permadeath
@@ -152,6 +196,10 @@ public unsafe class Mod : IMod {
             { "bp_rabbit_queen1_pt6_s", this.CreatePostSteelDetour("bp_rabbit_queen1_pt6_s")},
             { "bp_rabbit_queen1_pt8", this.CreatePostSteelDetour("bp_rabbit_queen1_pt8")},
             { "bp_rabbit_queen1_pt8_s", this.CreatePostSteelDetour("bp_rabbit_queen1_pt8_s")},
+            // steelheart compatibility
+            { "bp_rabbit_queen1_steel_activate", this.RabbitQueen1SteelActivateDetour},
+            // hitbox
+            { "scr_player_radius_calc", this.PlayerRadiusCalcDetour}
         };
 
         foreach (var detourPair in detourMap) {
@@ -166,14 +214,24 @@ public unsafe class Mod : IMod {
 
     private void ConfigSetupHooks() {
         // function to enable/disable certain hooks depending on config
-        if (!this.config.InfernalBBQ) {
-            // playing BEX
-            foreach (var script in this.bbqScripts) ScriptHooks[script].Disable();
-            this.UnlimitHealth();
-        } else {
+
+        // playing BEX
+        foreach (var script in this.bbqScripts) ScriptHooks[script].Disable();
+        foreach (var script in this.disableScripts) ScriptHooks[script].Disable();
+        this.UnlimitHealth();
+
+        if (this.config.InfernalBBQ) {
             // playing BBQ
             foreach (var script in this.bbqScripts) ScriptHooks[script].Enable();
             this.LimitHealth();
+        } else {
+            if (this.config.LimitHealth) { foreach (var script in this.limitHealthScripts) ScriptHooks[script].Enable(); this.LimitHealth(); }
+            if (this.config.LimitSpeed) foreach (var script in this.limitSpeedScripts) ScriptHooks[script].Enable();
+            if (this.config.DisableBulletDeletion) foreach (var script in this.bulletDeletionScripts) ScriptHooks[script].Enable();
+            if (this.config.Permadeath) foreach (var script in this.permadeathScripts) ScriptHooks[script].Enable();
+            if (this.config.DisableInvuln) foreach (var script in this.invulnScripts) ScriptHooks[script].Enable();
+            if (this.config.SetHitbox) foreach (var script in this.setHitboxScripts) ScriptHooks[script].Enable();
+            if (this.config.Steelheart) foreach (var script in this.steelheartScripts) ScriptHooks[script].Enable();
         }
     }
 
@@ -184,6 +242,7 @@ public unsafe class Mod : IMod {
         // for things that activate on run start, activate on the next encounter.
         this.inBattle = false;
         this.newRun = true;
+        this.shiraSteelCount = 0;
         return hook!.OriginalFunction(self, other, returnValue, argc, argv);
     }
 
@@ -307,19 +366,70 @@ public unsafe class Mod : IMod {
             int id = (int) utils.RValueToLong(rnsReloaded.FindValue(self, "playerId"));
             // change mult to be based off original movement speed and cap at -2
             if (argv[0]->Real * this.movementSpeeds[id] > BBQSPEED) {
-                double cutSpeed = this.movementSpeeds[id] < BBQSPEED ? this.movementSpeeds[id] : BBQSPEED;
-                //double cutSpeed = BBQSPEED; // temp
-                argv[0]->Real = BBQSPEED / cutSpeed;
+                argv[0]->Real = 1.0;
+            } else {
+                argv[0]->Real = argv[0]->Real * this.movementSpeeds[id] / BBQSPEED;
             }
         }
         returnValue = hook!.OriginalFunction(self, other, returnValue, argc, argv);
         return returnValue;
     }
 
+    private RValue* Hblade2Detour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["ipat_hblade_2"];
+        ScriptHooks["scr_char_set_forcedmarch"].Enable(); // only normalize march when these abilities are used
+        returnValue = hook!.OriginalFunction(self, other, returnValue, argc, argv);
+        ScriptHooks["scr_char_set_forcedmarch"].Disable();
+        return returnValue;
+    }
+
+    private RValue* Bruiser3pt2Detour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["ipat_bruiser_3_pt2"];
+        ScriptHooks["scr_char_set_forcedmarch"].Enable(); // only normalize march when these abilities are used
+        returnValue = hook!.OriginalFunction(self, other, returnValue, argc, argv);
+        ScriptHooks["scr_char_set_forcedmarch"].Disable();
+        return returnValue;
+    }
+
+    private RValue* ForcedmarchDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["scr_char_set_forcedmarch"];
+        
+        if (this.IsReady(out var rnsReloaded, out var hooks, out var utils, out var scrbp, out var bp)) {
+            double time = utils.RValueToDouble(argv[2]);
+            // forceMarchLengths
+            // joining lobby: 1200
+            // interacting with lobby stuff: 899
+            // winds: 599
+            // bruiser: 499
+            // heavyblade: ~293
+            double prevX = utils.RValueToDouble(rnsReloaded.FindValue(self, "distMovePrevX"));
+            double prevY = utils.RValueToDouble(rnsReloaded.FindValue(self, "distMovePrevY"));
+            double deltaX = utils.RValueToDouble(argv[0]) - prevX;
+            double deltaY = utils.RValueToDouble(argv[1]) - prevY;
+
+            double currSpeed = Double.Hypot(deltaX, deltaY) / (time / 1000);
+            if (currSpeed > BBQSPEED * 60) { // impose speed limit if larger than BBQ speed
+                double theta = Math.Atan2(deltaY, deltaX);
+                double newX = Math.Cos(theta) * BBQSPEED * 60 * time / 1000 + prevX;
+                double newY = Math.Sin(theta) * BBQSPEED * 60 * time / 1000 + prevY;
+                argv[0]->Real = newX;
+                argv[1]->Real = newY;
+            }
+        }
+        returnValue = hook!.OriginalFunction(self, other, returnValue, argc, argv);
+        return returnValue;
+    }
+
+    private RValue* WingedCapDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["ipat_winged_cap"];
+        return returnValue; // winged cap directly sets mult so we have to disable it
+    }
+
+
     // BULLET DELETION
     private RValue* EraseRadiusDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
         var hook = ScriptHooks["scrbp_erase_radius"];
-        RValue newRadius = new RValue(-1);
+        RValue newRadius = new RValue(-1000);
         argv[2] = &newRadius;
         return hook!.OriginalFunction(self, other, returnValue, argc, argv);
     }
@@ -354,7 +464,7 @@ public unsafe class Mod : IMod {
             returnValue = hook!.OriginalFunction(self, other, returnValue, argc, argv);
             return returnValue;
         };
-    }
+    }   
 
     // invuln hooks
     private RValue* PlayerDmgDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
@@ -381,6 +491,27 @@ public unsafe class Mod : IMod {
         }
         return returnValue;
     }
+
+    // steelheart compatibility
+    private RValue* RabbitQueen1SteelActivateDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["bp_rabbit_queen1_steel_activate"];
+        if (this.IsReady(out var rnsReloaded, out var hooks, out var utils, out var scrbp, out var bp)) {
+            this.shiraSteelCount++;
+            if (this.shiraSteelCount == 4) {
+                rnsReloaded.ExecuteScript("bp_rabbit_queen1_steel_activate", self, other, argc, argv);
+            }
+            returnValue = ScriptHooks["bp_rabbit_queen1_steel_activate"].OriginalFunction(self, other, returnValue, argc, argv);
+        }
+        return returnValue;
+    }
+
+    // HITBOX
+    private RValue* PlayerRadiusCalcDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        var hook = ScriptHooks["scr_player_radius_calc"];
+        RValue newRadius = new RValue(1);
+        return &newRadius;
+    }
+        
 
     public void Suspend() {}
 
