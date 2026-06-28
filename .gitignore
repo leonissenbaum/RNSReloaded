@@ -11,3 +11,5 @@ obj/
 /scripts/*.class
 /typings
 pyrightconfig.json
+RNSReloaded.MusicLogger/
+RNSReloaded.DamageMultiplier/

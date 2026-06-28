@@ -28,6 +28,14 @@ public enum Stage {
     PINNACLE = 8
 }
 
+public enum Music {
+    NONE = 0,
+    SERIOUSBATTLE = 9,
+    MYSTERIOUSBATTLE = 10,
+    VALIANTBATTLE = 11,
+    MOONLITPINACLE = 12
+}
+
 public enum Anims {
     None,
     Center,
@@ -86,12 +94,14 @@ public class BDLookup {
         public int stage { get; }
         public double zoom { get; }
         public Anims anims { get; }
+        public int music { get; }
 
-        public EnemyData(Stage stage = Stage.OUTSKIRTS, double zoom = 1.0, bool basic = true, Anims anim = Anims.None) {
+        public EnemyData(Stage stage = Stage.OUTSKIRTS, double zoom = 1.0, bool basic = true, Anims anim = Anims.None, Music music = Music.NONE) {
             this.basic = basic;
             this.stage = (int) stage;
             this.zoom = zoom;
             this.anims = anim;
+            this.music = (int) music;
         }
     }
 
@@ -508,7 +518,7 @@ public class BDLookup {
     };
 
     public static readonly Dictionary<string, PatternData> PatternMap = new() {
-        // patterns to enemy, multi, length, partner, mix
+        // patterns to enemy, multi, length, partner, mix, music
         // any patterns without specified times are untimed (UNIMPLEMENTED)
         // tagged data with startup and weirdo aren't currently in use
         // tutorial // (UNIMPLEMENTED)
@@ -1053,8 +1063,8 @@ public class BDLookup {
         { "bird_whispering0", new EnemyData(Stage.NEST, 0.9) }, // exception
         { "bird_whispering1", new EnemyData(Stage.NEST, 0.9) },
         { "bird_archon0", new EnemyData(Stage.NEST, 0.9, false) },
-        { "bird_valedictorian0", new EnemyData(Stage.NEST, 0.9, false, Anims.Center) },
-        { "bird_valedictorian1", new EnemyData(Stage.NEST, 0.85, false, Anims.Twili) },
+        { "bird_valedictorian0", new EnemyData(Stage.NEST, 0.9, false, Anims.Center, Music.MYSTERIOUSBATTLE) },
+        { "bird_valedictorian1", new EnemyData(Stage.NEST, 0.85, false, Anims.Twili, Music.MYSTERIOUSBATTLE) },
 
         // arsenal
         { "wolf_greyeye0", new EnemyData(Stage.ARSENAL, 0.8) },
@@ -1062,8 +1072,8 @@ public class BDLookup {
         { "wolf_bluepaw0", new EnemyData(Stage.ARSENAL, 0.9) },
         { "wolf_bluepaw1", new EnemyData(Stage.ARSENAL, 0.9) },
         { "wolf_snowfur0", new EnemyData(Stage.ARSENAL, 0.9, false, Anims.Tassha) },
-        { "wolf_steeltooth0", new EnemyData(Stage.ARSENAL, 0.9, false, Anims.Center) },
-        { "wolf_steeltooth1", new EnemyData(Stage.ARSENAL, 0.75, false, Anims.Merran) },
+        { "wolf_steeltooth0", new EnemyData(Stage.ARSENAL, 0.9, false, Anims.Center, Music.SERIOUSBATTLE) },
+        { "wolf_steeltooth1", new EnemyData(Stage.ARSENAL, 0.75, false, Anims.Merran, Music.SERIOUSBATTLE) },
 
         // lighthouse
         { "dragon_gold0", new EnemyData(Stage.LIGHTHOUSE) },
@@ -1071,8 +1081,8 @@ public class BDLookup {
         { "dragon_emerald0", new EnemyData(Stage.LIGHTHOUSE, 0.95) },
         { "dragon_emerald1", new EnemyData(Stage.LIGHTHOUSE, 0.95) },
         { "dragon_ruby0", new EnemyData(Stage.LIGHTHOUSE, 0.8, false, Anims.Karsi) },
-        { "dragon_mythril0", new EnemyData(Stage.LIGHTHOUSE, 0.9, false) },
-        { "dragon_mythril1", new EnemyData(Stage.LIGHTHOUSE, 0.7, false, Anims.Ranalie) },
+        { "dragon_mythril0", new EnemyData(Stage.LIGHTHOUSE, 0.9, false, music: Music.SERIOUSBATTLE) },
+        { "dragon_mythril1", new EnemyData(Stage.LIGHTHOUSE, 0.7, false, Anims.Ranalie, Music.SERIOUSBATTLE) },
 
         // streets
         { "mouse_archer0", new EnemyData(Stage.STREETS, 0.8) },
@@ -1080,8 +1090,8 @@ public class BDLookup {
         { "mouse_oakspear0", new EnemyData(Stage.STREETS, 0.9) },
         { "mouse_oakspear1", new EnemyData(Stage.STREETS, 0.9) },
         { "mouse_rosemage0", new EnemyData(Stage.STREETS, 0.8, false) },
-        { "mouse_paladin0", new EnemyData(Stage.STREETS, 0.9, false) },
-        { "mouse_paladin1", new EnemyData(Stage.STREETS, 0.8, false, Anims.Matti) },
+        { "mouse_paladin0", new EnemyData(Stage.STREETS, 0.9, false, music: Music.VALIANTBATTLE) },
+        { "mouse_paladin1", new EnemyData(Stage.STREETS, 0.8, false, Anims.Matti, Music.VALIANTBATTLE) },
 
         // lakeside
         { "frog_seamstress0", new EnemyData(Stage.LAKESIDE, 0.9) },
@@ -1089,8 +1099,8 @@ public class BDLookup {
         { "frog_songstress0", new EnemyData(Stage.LAKESIDE, 0.9) },
         { "frog_songstress1", new EnemyData(Stage.LAKESIDE, 0.9) },
         { "frog_painter0", new EnemyData(Stage.LAKESIDE, 0.9, false) },
-        { "frog_idol0", new EnemyData(Stage.LAKESIDE, 0.85, false, Anims.Center) },
-        { "frog_idol1", new EnemyData(Stage.LAKESIDE, 0.85, false, Anims.Avy) },
+        { "frog_idol0", new EnemyData(Stage.LAKESIDE, 0.85, false, Anims.Center, Music.MYSTERIOUSBATTLE) },
+        { "frog_idol1", new EnemyData(Stage.LAKESIDE, 0.85, false, Anims.Avy, Music.MYSTERIOUSBATTLE) },
 
         // keep
         { "queens_axe0", new EnemyData(Stage.KEEP, 0.9) },
@@ -1100,8 +1110,8 @@ public class BDLookup {
         { "queens_staff0", new EnemyData(Stage.KEEP) },
 
         // pinnacle
-        { "rabbit_queen0", new EnemyData(Stage.PINNACLE, 0.9, false, Anims.Center) },
-        { "rabbit_queen1", new EnemyData(Stage.PINNACLE, 0.75, false, Anims.Shira) }
+        { "rabbit_queen0", new EnemyData(Stage.PINNACLE, 0.9, false, Anims.Center, Music.MOONLITPINACLE) },
+        { "rabbit_queen1", new EnemyData(Stage.PINNACLE, 0.75, false, Anims.Shira, Music.MOONLITPINACLE) }
     };
 
     private struct DiffRedirectMapMaker {

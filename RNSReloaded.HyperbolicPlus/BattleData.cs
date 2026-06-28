@@ -28,6 +28,7 @@ public class BattleData {
         stage = ed.stage;
         zoom = ed.zoom;
         anim = ed.anims;
+        music = ed.music;
     }
 
     public static string name { get; set; } // ex: Menna0_S
@@ -40,6 +41,7 @@ public class BattleData {
     public static double zoom { get; set; } // ex: 1.0
     public static int stage { get; set; } // ex: 2
     public static Anims anim { get; set; } // ex: Anims.None
+    public static int music { get; set; } // ex: Music.NONE
     public static Mixes mix { get; set; } // ex: Mixes.None
 
     static BattleData() {
