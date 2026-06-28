@@ -40,7 +40,6 @@ public unsafe class Mod : IMod {
     private Config.Config config = null!;
     private Random rng = new Random();
 
-    private string battleName = "";
     private int atkNo = 0;
     private double damageMult = 0.0;
     private double gameSpeed = 1.0;
@@ -50,6 +49,8 @@ public unsafe class Mod : IMod {
     private bool enFlag = false; // prevent infinite loops
     private bool karsiDone = false; // makes sure karsi's circle is activated only once
     private bool isTakingDamage = false; // for invuln control
+    private CInstance* musicSelf = null;
+    private CInstance* musicOther = null;
 
     private static Dictionary<string, IHook<ScriptDelegate>> ScriptHooks = [];
     private static readonly string[] PREVENTINVULNSCRIPTS = [
@@ -158,6 +159,9 @@ public unsafe class Mod : IMod {
             { "scr_hbsflag_check", this.AddHbsFlagCheckDetour},
             // speed control
             { "scrbp_gamespeed", this.GameSpeedDetour},
+            // music context capture
+            { "scr_music_play", this.CreateMusicContextDetour("scr_music_play")},
+            { "scr_music_transfer", this.CreateMusicContextDetour("scr_music_transfer")},
             // permadeath
             { "scr_kotracker_can_revive", this.ReviveDetour},
             { "scr_kotracker_draw_timer", this.KOTimerDetour},
@@ -414,6 +418,15 @@ public unsafe class Mod : IMod {
                 this.RunAnimation(BattleData.anim, self, other);
                 rnsReloaded.ExecuteScript("scrbp_zoom", self, other, [new RValue(BattleData.zoom)]);
                 rnsReloaded.ExecuteScript("scr_stage_change", self, other, [new RValue(BattleData.stage)]);
+                rnsReloaded.ExecuteScript("scr_stage_play_music", self, other, [new RValue(BattleData.stage)]);
+                CInstance* musicCallSelf = this.musicSelf != null ? this.musicSelf : self;
+                CInstance* musicCallOther = this.musicOther != null ? this.musicOther : other;
+                if (BattleData.music != 0) {
+                    rnsReloaded.ExecuteScript("scr_music_play", musicCallSelf, musicCallOther, [new RValue(BattleData.music)]);
+                } else {
+                    // change from the out of battle theme to the in battle theme
+                    rnsReloaded.ExecuteScript("scr_music_transfer", musicCallSelf, musicCallOther, [new RValue(true)]);
+                }
                 // set tracking variables
                 this.atkNo = 0;
                 this.gameSpeed = utils.GetGlobalVar("gameTimeSpeed")->Real;
@@ -450,6 +463,24 @@ public unsafe class Mod : IMod {
         }
 
         return returnValue;
+    }
+
+    private ScriptDelegate CreateMusicContextDetour(string scriptName) {
+        return (CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) =>
+            this.MusicContextDetour(scriptName, self, other, returnValue, argc, argv);
+    }
+
+    private RValue* MusicContextDetour(string scriptName, CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        // when playing music the game cares about the current self and other instances, if it's wrong then there's a crash
+        // and if we just force the values onto a different instance, multiple tracks play at once
+        // so i just copy the instances here so we can play onto the original ones
+        // very bad way of doing it but if it works it works
+        var hook = ScriptHooks[scriptName];
+
+        this.musicSelf = self;
+        this.musicOther = other;
+
+        return hook.OriginalFunction(self, other, returnValue, argc, argv);
     }
 
     private RValue* EnrageTimeDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
