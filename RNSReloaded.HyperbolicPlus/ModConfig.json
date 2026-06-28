@@ -1,8 +1,8 @@
 {
   "ModId": "RNSReloaded.HyperbolicPlus",
   "ModName": "HyperbolicPlus",
-  "ModAuthor": "MicrowaveBunny",
-  "ModVersion": "1.1.1",
+  "ModAuthor": "MicrowaveBunny, leonissenbaum",
+  "ModVersion": "2.0.0",
   "ModDescription": "**Limits online play.**\n\nTime to die. Over. And Over.",
   "ModDll": "RNSReloaded.HyperbolicPlus.dll",
   "ModIcon": "",

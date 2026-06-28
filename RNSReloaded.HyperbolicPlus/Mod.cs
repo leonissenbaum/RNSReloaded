@@ -145,7 +145,10 @@ public unsafe class Mod : IMod {
                 }
             },
             // encounters
-            { "scrdt_encounter", this.EncounterDetour},
+            { "scr_hallwaygen_outskirts", this.CreateHallwayDetour("scr_hallwaygen_outskirts", NotchType.IntroRoom)},
+            { "scr_hallwaygen_outskirts_n", this.CreateHallwayDetour("scr_hallwaygen_outskirts_n", NotchType.IntroRoom)},
+            { "scr_hallwaygen_geode", this.CreateHallwayDetour("scr_hallwaygen_geode", NotchType.IntroRoom)},
+            { "scr_hallwaygen_toybox", this.CreateHallwayDetour("scr_hallwaygen_toybox", NotchType.ToyboxIntro)},
             // enrage control
             { "bpsw_enrage_time", this.EnrageTimeDetour},
             // invuln control
@@ -312,15 +315,30 @@ public unsafe class Mod : IMod {
         return hook!.OriginalFunction(self, other, returnValue, argc, argv);
     }
 
-    private RValue* EncounterDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
-        var hook = ScriptHooks["scrdt_encounter"];
-        if (this.IsReady(out var rnsReloaded, out var hooks, out var utils, out var scrbp, out var bp)) {
-            // replace this with new battleData function later
-            this.battleName = Enum.GetName(this.config.ActivePattern) ?? "";
-            string enemy = BattleData.enemy;
+    private ScriptDelegate CreateHallwayDetour(string scriptName, NotchType introRoom) {
+        return (CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) =>
+            this.HallwayDetour(scriptName, introRoom, self, other, returnValue, argc, argv);
+    }
 
-            // replace current enc with chosen one
-            rnsReloaded.CreateString(argv[0], "enc_" + enemy!);
+    private RValue* HallwayDetour(
+        string scriptName,
+        NotchType introRoom,
+        CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv
+    ) {
+        BattleData.ReadConfig(this.config);
+        this.logger.PrintMessage($"Battle name: {Enum.GetName(this.config.ActivePattern)}", System.Drawing.Color.Cyan);
+        this.logger.PrintMessage($"Enemy: {BattleData.enemy}", System.Drawing.Color.Cyan);
+        var hook = ScriptHooks[scriptName];
+        returnValue = hook.OriginalFunction(self, other, returnValue, argc, argv);
+
+        if (this.IsReady(out var rnsReloaded, out var hooks, out var utils, out var scrbp, out var bp)) {
+            string enemy = BattleData.enemy;
+            var encounterName = "enc_" + enemy;
+            rnsReloaded.utils.setHallway(new List<Notch> {
+                new Notch(introRoom, "", 0, 0),
+                new Notch(NotchType.Encounter, encounterName != null ? encounterName : "enc_bird_student0", 0, 0),
+                new Notch(NotchType.EndRun, "", 0, 0)
+            }, self, rnsReloaded);
 
             // hook into the right scripts given the difficulty
             if (!this.hookedScripts.Contains("bp_" + enemy + "_s")) {
@@ -338,14 +356,14 @@ public unsafe class Mod : IMod {
                 this.hookedScripts.Add("bp_" + enemy);
             }
 
-            // set level
+            // set level, the game adds 2 levels after so 997 gets us 999
             var enemyLevel = rnsReloaded.FindValue(rnsReloaded.GetGlobalInstance(), "enemyLevel");
-            *enemyLevel = new RValue(999);
-        }
+            *enemyLevel = new RValue(997);
 
+        }
         this.enFlag = false;
         this.karsiDone = false;
-        returnValue = hook.OriginalFunction(self, other, returnValue, argc, argv);
+        
         return returnValue;
     }
 
