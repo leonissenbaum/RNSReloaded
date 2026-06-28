@@ -373,6 +373,28 @@ public class Config : Configurable<Config> {
         Shira2_7M,
         Shira2_8M,
 
+        
+        // geode
+        Plee1_S,
+        Plee2_S,
+        Plee3_S,
+        Tap1_S,
+        Tap2_S,
+        Tap3_S,
+        Whit1_S,
+        Whit2_S,
+        Whit3_S,
+
+        Plee1_M,
+        Plee2_M,
+        Plee3_M,
+        Tap1_M,
+        Tap2_M,
+        Tap3_M,
+        Whit1_M,
+        Whit2_M,
+        Whit3_M,
+
         // mixes
         Twili1_Mix_S,
         Twili2_Mix_S,
@@ -385,7 +407,7 @@ public class Config : Configurable<Config> {
         Avy1_Mix_S,
         Avy2_Mix_S,
         Shira1_Mix_S,
-        Shira2_Mix_S
+        Shira2_Mix_S,
     }
 
     [DisplayName("Battle Pattern")]

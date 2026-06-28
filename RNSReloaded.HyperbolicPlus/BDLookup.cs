@@ -25,7 +25,9 @@ public enum Stage {
     STREETS = 5,
     LAKESIDE = 6,
     KEEP = 7,
-    PINNACLE = 8
+    PINNACLE = 8,
+    GEODE = 9,
+    DARKHOUSE = 11
 }
 
 public enum Music {
@@ -33,7 +35,8 @@ public enum Music {
     SERIOUSBATTLE = 9,
     MYSTERIOUSBATTLE = 10,
     VALIANTBATTLE = 11,
-    MOONLITPINACLE = 12
+    MOONLITPINACLE = 12,
+    FARRAHMUSIC = 19
 }
 
 public enum Anims {
@@ -151,6 +154,27 @@ public class BDLookup {
         { "PinElta3M", "bp_mouse_cadet2" },
         { "Maxi2M", "bp_frog_tinkerer1" },
         { "Maxi3M", "bp_frog_tinkerer2" },
+
+        // geode
+        { "Plee1_S", "bp_geode_butterfly0_s" },
+        { "Plee2_S", "bp_geode_butterfly1_s" },
+        { "Plee3_S", "bp_geode_butterfly2_s" },
+        { "Tap1_S", "bp_geode_firefly0_s" },
+        { "Tap2_S", "bp_geode_firefly1_s" },
+        { "Tap3_S", "bp_geode_firefly2_s" },
+        { "Whit1_S", "bp_geode_moth0_s" },
+        { "Whit2_S", "bp_geode_moth1_s" },
+        { "Whit3_S", "bp_geode_moth2_s" },
+
+        { "Plee1_M", "bp_geode_butterfly0" },
+        { "Plee2_M", "bp_geode_butterfly1" },
+        { "Plee3_M", "bp_geode_butterfly2" },
+        { "Tap1_M", "bp_geode_firefly0" },
+        { "Tap2_M", "bp_geode_firefly1" },
+        { "Tap3_M", "bp_geode_firefly2" },
+        { "Whit1_M", "bp_geode_moth0" },
+        { "Whit2_M", "bp_geode_moth1" },
+        { "Whit3_M", "bp_geode_moth2" },
 
         // nest
         { "Menna1_S", "bp_bird_student0_s" },
@@ -558,6 +582,27 @@ public class BDLookup {
         { "bp_frog_tinkerer1", new PatternData("frog_tinkerer1", true) },
         { "bp_frog_tinkerer2", new PatternData("frog_tinkerer2", true) },
         { "bp_wolf_blackear2_n", new PatternData("wolf_blackear2", true) }, // weirdo
+
+        // geode
+        { "bp_geode_butterfly0_s", new PatternData("geode_butterfly0") },
+        { "bp_geode_butterfly1_s", new PatternData("geode_butterfly1") },
+        { "bp_geode_butterfly2_s", new PatternData("geode_butterfly2") },
+        { "bp_geode_firefly0_s", new PatternData("geode_firefly0") },
+        { "bp_geode_firefly1_s", new PatternData("geode_firefly1") },
+        { "bp_geode_firefly2_s", new PatternData("geode_firefly2") },
+        { "bp_geode_moth0_s", new PatternData("geode_moth0") },
+        { "bp_geode_moth1_s", new PatternData("geode_moth1") },
+        { "bp_geode_moth2_s", new PatternData("geode_moth2") },
+
+        { "bp_geode_butterfly0", new PatternData("geode_butterfly0", true) },
+        { "bp_geode_butterfly1", new PatternData("geode_butterfly1", true) },
+        { "bp_geode_butterfly2", new PatternData("geode_butterfly2", true) },
+        { "bp_geode_firefly0", new PatternData("geode_firefly0", true) },
+        { "bp_geode_firefly1", new PatternData("geode_firefly1", true) },
+        { "bp_geode_firefly2", new PatternData("geode_firefly2", true) },
+        { "bp_geode_moth0", new PatternData("geode_moth0", true) },
+        { "bp_geode_moth1", new PatternData("geode_moth1", true) },
+        { "bp_geode_moth2", new PatternData("geode_moth2", true) },
 
         // nest
         { "bp_bird_student0_s", new PatternData("bird_student0") },
@@ -1111,7 +1156,18 @@ public class BDLookup {
 
         // pinnacle
         { "rabbit_queen0", new EnemyData(Stage.PINNACLE, 0.9, false, Anims.Center, Music.MOONLITPINACLE) },
-        { "rabbit_queen1", new EnemyData(Stage.PINNACLE, 0.75, false, Anims.Shira, Music.MOONLITPINACLE) }
+        { "rabbit_queen1", new EnemyData(Stage.PINNACLE, 0.75, false, Anims.Shira, Music.MOONLITPINACLE) },
+
+        // geode
+        { "geode_butterfly0", new EnemyData(Stage.GEODE) },
+        { "geode_butterfly1", new EnemyData(Stage.GEODE) },
+        { "geode_butterfly2", new EnemyData(Stage.GEODE) },
+        { "geode_firefly0", new EnemyData(Stage.GEODE) },
+        { "geode_firefly1", new EnemyData(Stage.GEODE) },
+        { "geode_firefly2", new EnemyData(Stage.GEODE) },
+        { "geode_moth0", new EnemyData(Stage.GEODE) },
+        { "geode_moth1", new EnemyData(Stage.GEODE) },
+        { "geode_moth2", new EnemyData(Stage.GEODE) },
     };
 
     private struct DiffRedirectMapMaker {
