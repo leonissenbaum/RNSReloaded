@@ -18,7 +18,7 @@ public class BattleData {
         BDLookup.PatternData pd = BDLookup.PatternMap[pattern];
         enemy = pd.enemy;
         multi = pd.multi;
-        length = pd.length;
+        length = GetLengthByPattern(pattern, config);
         partner = pd.partner;
         mix = pd.mixes;
 
@@ -36,6 +36,14 @@ public class BattleData {
             zoom = pd.zoomOverwrite;
         }
 
+    }
+
+    public static void ApplyLiveLengthOverride(Config.Config config) {
+        if (string.IsNullOrEmpty(pattern)) return;
+        if (!TryGetSelectedPattern(config, out var selectedPattern)) return;
+        if (selectedPattern != pattern) return;
+
+        length = GetLengthByPattern(pattern, config);
     }
 
     public static string name { get; set; } // ex: Menna0_S
@@ -96,11 +104,29 @@ public class BattleData {
     }
 
     public static int GetTotalLength(List<string> patterns) {
-        return patterns.Sum(pattern => BDLookup.PatternMap[pattern].length);
+        return patterns.Sum(GetLengthByPattern);
     }
 
     public static int GetLengthByPattern(string pattern) {
+        return GetLengthByPattern(pattern, null);
+    }
+
+    public static int GetLengthByPattern(string pattern, Config.Config? config) {
+        if (
+            config?.PatternLengthOverride is int overrideLength
+            && overrideLength > 0
+            && TryGetSelectedPattern(config, out var selectedPattern)
+            && selectedPattern == pattern
+        ) {
+            return overrideLength;
+        }
+
         return BDLookup.PatternMap[pattern].length;
+    }
+
+    private static bool TryGetSelectedPattern(Config.Config config, out string pattern) {
+        var selectedName = Enum.GetName(config.ActivePattern) ?? "";
+        return BDLookup.NameMap.TryGetValue(selectedName, out pattern!);
     }
 
     public static List<string> GetPatternsByMix(Mixes mix) {

@@ -418,6 +418,38 @@ public class Config : Configurable<Config> {
         Arinae_4M,
         Arinae_5M,
 
+        Farrah1_1S,
+        Farrah1_2S,
+        Farrah1_3S,
+        Farrah1_4S,
+        Farrah1_5S,
+        Farrah1_6S,
+
+        Farrah1_1M,
+        Farrah1_2M,
+        Farrah1_3M,
+        Farrah1_4M,
+        Farrah1_5M,
+        Farrah1_6M,
+
+        Farrah2_1S,
+        Farrah2_2S,
+        Farrah2_3S,
+        Farrah2_4S,
+        Farrah2_5S,
+        Farrah2_6S,
+        Farrah2_7S,
+        Farrah2_8S,
+
+        Farrah2_1M,
+        Farrah2_2M,
+        Farrah2_3M,
+        Farrah2_4M,
+        Farrah2_5M,
+        Farrah2_6M,
+        Farrah2_7M,
+        Farrah2_8M,
+
         // mixes
         Twili1_Mix_S,
         Twili2_Mix_S,
@@ -456,4 +488,10 @@ public class Config : Configurable<Config> {
     [DefaultValue(true)]
 
     public bool Permadeath { get; set; } = true;
+
+    [DisplayName("Pattern Length Override (Don't touch)")]
+    [Description("Optional loop length in milliseconds for the selected battle pattern. Leave blank for the built-in length. Do not touch if you don't know what you're doing.")]
+    [DefaultValue(null)]
+    public int? PatternLengthOverride { get; set; } = null;
+
 }

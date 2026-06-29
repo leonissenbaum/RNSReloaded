@@ -83,6 +83,7 @@ public unsafe class Mod : IMod {
 
     private void ConfigurationUpdated(IUpdatableConfigurable newConfig) {
         this.config = (Config.Config) newConfig;
+        BattleData.ApplyLiveLengthOverride(this.config);
     }
 
     public void Ready() {
@@ -263,6 +264,12 @@ public unsafe class Mod : IMod {
                     animName = new RValue(0);
                     rnsReloaded.CreateString(&animName, "anim_rabbit_queen_big");
                     argv = [animName, new RValue(500), new RValue(2.40), new RValue(0.60)];
+                    rnsReloaded.ExecuteScript("scrbp_transform_animation", self, other, argv);
+                    break;
+                case Anims.Farrah:
+                    animName = new RValue(0);
+                    rnsReloaded.CreateString(&animName, "anim_depths_hound_big");
+                    argv = [animName, new RValue(500), new RValue(2.80), new RValue(0.75)];
                     rnsReloaded.ExecuteScript("scrbp_transform_animation", self, other, argv);
                     break;
             }

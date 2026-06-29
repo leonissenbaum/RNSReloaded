@@ -49,7 +49,8 @@ public enum Anims {
     Ranalie,
     Matti,
     Avy,
-    Shira
+    Shira,
+    Farrah,
 }
 
 public enum Mixes {
@@ -200,6 +201,39 @@ public class BDLookup {
         { "Arinae_3M", "bp_depths_angel0_pt5" },
         { "Arinae_4M", "bp_depths_angel0_pt6" },
         { "Arinae_5M", "bp_depths_angel0_pt7" },
+
+        { "Farrah1_1S", "bp_depths_hound0_pt2_s" },
+        { "Farrah1_2S", "bp_depths_hound0_pt3_s" },
+        { "Farrah1_3S", "bp_depths_hound0_pt4_s" },
+        { "Farrah1_4S", "bp_depths_hound0_pt5_s" },
+        { "Farrah1_5S", "bp_depths_hound0_pt6_s" },
+        { "Farrah1_6S", "bp_depths_hound0_pt7_s" },
+
+        { "Farrah1_1M", "bp_depths_hound0_pt2" },
+        { "Farrah1_2M", "bp_depths_hound0_pt3" },
+        { "Farrah1_3M", "bp_depths_hound0_pt4" },
+        { "Farrah1_4M", "bp_depths_hound0_pt5" },
+        { "Farrah1_5M", "bp_depths_hound0_pt6" },
+        { "Farrah1_6M", "bp_depths_hound0_pt7" },
+
+        // farrah phase 2 ordering is weird, 2 -> 6 -> 3 -> 7 -> 4 -> 8 -> 9
+        { "Farrah2_1S", "bp_depths_hound1_pt2_s" },
+        { "Farrah2_2S", "bp_depths_hound1_pt6_s" },
+        { "Farrah2_3S", "bp_depths_hound1_pt3_s" },
+        { "Farrah2_4S", "bp_depths_hound1_pt7_s" },
+        { "Farrah2_5S", "bp_depths_hound1_pt4_s" },
+        { "Farrah2_6S", "bp_depths_hound1_pt8_s" },
+        { "Farrah2_7S", "bp_depths_hound1_pt5_s" },
+        { "Farrah2_8S", "bp_depths_hound1_pt9_s" },
+
+        { "Farrah2_1M", "bp_depths_hound1_pt2" },
+        { "Farrah2_2M", "bp_depths_hound1_pt6" },
+        { "Farrah2_3M", "bp_depths_hound1_pt3" },
+        { "Farrah2_4M", "bp_depths_hound1_pt7" },
+        { "Farrah2_5M", "bp_depths_hound1_pt4" },
+        { "Farrah2_6M", "bp_depths_hound1_pt8" },
+        { "Farrah2_7M", "bp_depths_hound1_pt5" },
+        { "Farrah2_8M", "bp_depths_hound1_pt9" },
 
         // nest
         { "Menna1_S", "bp_bird_student0_s" },
@@ -653,6 +687,38 @@ public class BDLookup {
         { "bp_depths_angel0_pt5", new PatternData("depths_angel0", true) },
         { "bp_depths_angel0_pt6", new PatternData("depths_angel0", true) },
         { "bp_depths_angel0_pt7", new PatternData("depths_angel0", true) },
+
+        { "bp_depths_hound0_pt2_s", new PatternData("depths_hound0") }, // no timer needed
+        { "bp_depths_hound0_pt3_s", new PatternData("depths_hound0") }, // no timer needed
+        { "bp_depths_hound0_pt4_s", new PatternData("depths_hound0", length: 21000) },
+        { "bp_depths_hound0_pt5_s", new PatternData("depths_hound0", length: 20000) },
+        { "bp_depths_hound0_pt6_s", new PatternData("depths_hound0", length: 20000) },
+        { "bp_depths_hound0_pt7_s", new PatternData("depths_hound0", length: 26000) },
+
+        { "bp_depths_hound0_pt2", new PatternData("depths_hound0", true) },
+        { "bp_depths_hound0_pt3", new PatternData("depths_hound0", true) },
+        { "bp_depths_hound0_pt4", new PatternData("depths_hound0", true) },
+        { "bp_depths_hound0_pt5", new PatternData("depths_hound0", true) },
+        { "bp_depths_hound0_pt6", new PatternData("depths_hound0", true) },
+        { "bp_depths_hound0_pt7", new PatternData("depths_hound0", true) },
+
+        { "bp_depths_hound1_pt2_s", new PatternData("depths_hound1") }, // no timer needed
+        { "bp_depths_hound1_pt3_s", new PatternData("depths_hound1") }, // no timer needed
+        { "bp_depths_hound1_pt4_s", new PatternData("depths_hound1") }, // no timer needed
+        { "bp_depths_hound1_pt5_s", new PatternData("depths_hound1", length: 20000) },
+        { "bp_depths_hound1_pt6_s", new PatternData("depths_hound1", length: 19000) },
+        { "bp_depths_hound1_pt7_s", new PatternData("depths_hound1", length: 19000) },
+        { "bp_depths_hound1_pt8_s", new PatternData("depths_hound1", length: 18000) },
+        { "bp_depths_hound1_pt9_s", new PatternData("depths_hound1", length: 20000) },
+
+        { "bp_depths_hound1_pt2", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt3", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt4", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt5", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt6", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt7", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt8", new PatternData("depths_hound1", true) },
+        { "bp_depths_hound1_pt9", new PatternData("depths_hound1", true) },
 
         // nest
         { "bp_bird_student0_s", new PatternData("bird_student0") },
@@ -1225,6 +1291,8 @@ public class BDLookup {
         { "depths_beast0", new EnemyData(Stage.DARKHOUSE, 0.9) },
         { "depths_beast1", new EnemyData(Stage.DARKHOUSE, 0.9) },
         { "depths_angel0", new EnemyData(Stage.DARKHOUSE, 0.7, false, Anims.Center) },
+        { "depths_hound0", new EnemyData(Stage.DARKHOUSE, 0.9, false, music: Music.FARRAHMUSIC) },
+        { "depths_hound1", new EnemyData(Stage.DARKHOUSE, 0.8, false, Anims.Farrah, music: Music.FARRAHMUSIC) },
     };
 
     private struct DiffRedirectMapMaker {
