@@ -688,7 +688,7 @@ public class BDLookup {
         { "bp_depths_angel0_pt6", new PatternData("depths_angel0", true) },
         { "bp_depths_angel0_pt7", new PatternData("depths_angel0", true) },
 
-        { "bp_depths_hound0_pt2_s", new PatternData("depths_hound0") }, // no timer needed
+        { "bp_depths_hound0_pt2_s", new PatternData("depths_hound0", length: 13000) },
         { "bp_depths_hound0_pt3_s", new PatternData("depths_hound0") }, // no timer needed
         { "bp_depths_hound0_pt4_s", new PatternData("depths_hound0", length: 21000) },
         { "bp_depths_hound0_pt5_s", new PatternData("depths_hound0", length: 20000) },
