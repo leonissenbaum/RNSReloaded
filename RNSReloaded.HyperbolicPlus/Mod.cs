@@ -47,7 +47,7 @@ public unsafe class Mod : IMod {
     private Difficulty diff = Difficulty.LUNAR;
     private int deadPlayers = 0; // bitmask representing dead players
     private bool enFlag = false; // prevent infinite loops
-    private bool karsiDone = false; // makes sure karsi's circle is activated only once
+    private bool oneTimeAttacksDone = false; // makes sure karsi's and arinae's circle are activated only once
     private bool isTakingDamage = false; // for invuln control
     private CInstance* musicSelf = null;
     private CInstance* musicOther = null;
@@ -221,7 +221,7 @@ public unsafe class Mod : IMod {
                     rnsReloaded.ExecuteScript("scrbp_transform_animation", self, other, argv);
                     break;
                 case Anims.Center:
-                    rnsReloaded.ExecuteScript("scrbp_move_character_absolute", self, other, [new RValue(960), new RValue(540), new RValue(1500), new RValue(0)]);
+                    rnsReloaded.ExecuteScript("scrbp_move_character_absolute", self, other, [new RValue(960), new RValue(540), new RValue(1500), new RValue(1)]);
                     break;
                 case Anims.Twili:
                     rnsReloaded.ExecuteScript("scrbp_move_character_absolute", self, other, [new RValue(960), new RValue(540), new RValue(1500), new RValue(0)]);
@@ -312,7 +312,7 @@ public unsafe class Mod : IMod {
             BattleData.ReadConfig(this.config);
             this.deadPlayers = 0; // reset mask
             this.enFlag = false;
-            this.karsiDone = false;
+            this.oneTimeAttacksDone = false;
             RValue* mapSeedR = rnsReloaded.FindValue(rnsReloaded.GetGlobalInstance(), "mapSeed");
             this.seed = (int) utils.RValueToLong(mapSeedR); // mapSeed is a different datatype for host/client
         }
@@ -366,7 +366,7 @@ public unsafe class Mod : IMod {
 
         }
         this.enFlag = false;
-        this.karsiDone = false;
+        this.oneTimeAttacksDone = false;
         
         return returnValue;
     }
@@ -427,14 +427,20 @@ public unsafe class Mod : IMod {
                     // change from the out of battle theme to the in battle theme
                     rnsReloaded.ExecuteScript("scr_music_transfer", musicCallSelf, musicCallOther, [new RValue(true)]);
                 }
+                if (!this.oneTimeAttacksDone &&
+                    BattleData.enemy == "depths_angel0" &&
+                    !BattleData.pattern.StartsWith("bp_depths_angel0_pt2")) {
+                    this.execute_pattern(self, other, "bp_depths_angel0_quickstart", []);
+                    this.oneTimeAttacksDone = true;
+                }
                 // set tracking variables
                 this.atkNo = 0;
                 this.gameSpeed = utils.GetGlobalVar("gameTimeSpeed")->Real;
             }
 
-            if (BattleData.anim == Anims.Karsi && !this.karsiDone && scrbp.time(self, other, ANIM_TIME)) {
+            if (BattleData.anim == Anims.Karsi && !this.oneTimeAttacksDone && scrbp.time(self, other, ANIM_TIME)) {
                 this.execute_pattern(self, other, "bp_dragon_ruby0_perm", []);
-                this.karsiDone = true;
+                this.oneTimeAttacksDone = true;
             }
 
             // check if play mix

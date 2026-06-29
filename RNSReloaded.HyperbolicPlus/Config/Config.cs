@@ -395,6 +395,29 @@ public class Config : Configurable<Config> {
         Whit2_M,
         Whit3_M,
 
+        // darkhouse
+        Laiza1_S,
+        Laiza2_S,
+        Taurus1_S,
+        Taurus2_S,
+
+        Laiza1_M,
+        Laiza2_M,
+        Taurus1_M,
+        Taurus2_M,
+
+        Arinae_1S,
+        Arinae_2S,
+        Arinae_3S,
+        Arinae_4S,
+        Arinae_5S,
+
+        Arinae_1M,
+        Arinae_2M,
+        Arinae_3M,
+        Arinae_4M,
+        Arinae_5M,
+
         // mixes
         Twili1_Mix_S,
         Twili2_Mix_S,

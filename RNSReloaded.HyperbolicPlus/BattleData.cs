@@ -26,9 +26,16 @@ public class BattleData {
         BDLookup.EnemyData ed = BDLookup.EnemyMap[enemy];
         basic = ed.basic;
         stage = ed.stage;
-        zoom = ed.zoom;
         anim = ed.anims;
         music = ed.music;
+
+        // handle custom zoom
+        if (pd.zoomOverwrite == 1.0) {
+            zoom = ed.zoom;
+        } else {
+            zoom = pd.zoomOverwrite;
+        }
+
     }
 
     public static string name { get; set; } // ex: Menna0_S

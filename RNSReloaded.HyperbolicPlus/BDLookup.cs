@@ -82,13 +82,15 @@ public class BDLookup {
         public int length { get; }
         public string? partner { get; }
         public Mixes mixes { get; }
+        public double zoomOverwrite { get; }
 
-        public PatternData(string enemy, bool multi = false, int length = 10000, string? partner = null, Mixes mix = Mixes.None) {
+        public PatternData(string enemy, bool multi = false, int length = 10000, string? partner = null, Mixes mix = Mixes.None, double zoomOverwrite = 1.0) {
             this.enemy = enemy;
             this.multi = multi;
             this.length = length;
             this.partner = partner;
             this.mixes = mix;
+            this.zoomOverwrite = zoomOverwrite;
         }
     }
 
@@ -175,6 +177,29 @@ public class BDLookup {
         { "Whit1_M", "bp_geode_moth0" },
         { "Whit2_M", "bp_geode_moth1" },
         { "Whit3_M", "bp_geode_moth2" },
+
+        // darkhouse
+        { "Laiza1_S", "bp_depths_basilisk0_s" },
+        { "Laiza2_S", "bp_depths_basilisk1_s" },
+        { "Taurus1_S", "bp_depths_beast0_s" },
+        { "Taurus2_S", "bp_depths_beast1_s" },
+
+        { "Laiza1_M", "bp_depths_basilisk0" },
+        { "Laiza2_M", "bp_depths_basilisk1" },
+        { "Taurus1_M", "bp_depths_beast0" },
+        { "Taurus2_M", "bp_depths_beast1" },
+
+        { "Arinae_1S", "bp_depths_angel0_pt2_s" },
+        { "Arinae_2S", "bp_depths_angel0_pt4_s" },
+        { "Arinae_3S", "bp_depths_angel0_pt5_s" },
+        { "Arinae_4S", "bp_depths_angel0_pt6_s" },
+        { "Arinae_5S", "bp_depths_angel0_pt7_s" },
+
+        { "Arinae_1M", "bp_depths_angel0_pt2" },
+        { "Arinae_2M", "bp_depths_angel0_pt4" },
+        { "Arinae_3M", "bp_depths_angel0_pt5" },
+        { "Arinae_4M", "bp_depths_angel0_pt6" },
+        { "Arinae_5M", "bp_depths_angel0_pt7" },
 
         // nest
         { "Menna1_S", "bp_bird_student0_s" },
@@ -603,6 +628,31 @@ public class BDLookup {
         { "bp_geode_moth0", new PatternData("geode_moth0", true) },
         { "bp_geode_moth1", new PatternData("geode_moth1", true) },
         { "bp_geode_moth2", new PatternData("geode_moth2", true) },
+
+        // darkhouse
+        { "bp_depths_basilisk0_s", new PatternData("depths_basilisk0") },
+        { "bp_depths_basilisk1_s", new PatternData("depths_basilisk1") },
+        { "bp_depths_beast0_s", new PatternData("depths_beast0") },
+        { "bp_depths_beast1_s", new PatternData("depths_beast1") },
+
+        { "bp_depths_basilisk0", new PatternData("depths_basilisk0", true) },
+        { "bp_depths_basilisk1", new PatternData("depths_basilisk1", true) },
+        { "bp_depths_beast0", new PatternData("depths_beast0", true) },
+        { "bp_depths_beast1", new PatternData("depths_beast1", true) },
+
+        { "bp_depths_angel0_s", new PatternData("depths_angel0") },
+        { "bp_depths_angel0_pt2_s", new PatternData("depths_angel0", zoomOverwrite: 0.9) },
+        { "bp_depths_angel0_pt4_s", new PatternData("depths_angel0", length: 17000) },
+        { "bp_depths_angel0_pt5_s", new PatternData("depths_angel0", length: 17000) },
+        { "bp_depths_angel0_pt6_s", new PatternData("depths_angel0", length: 14000) },
+        { "bp_depths_angel0_pt7_s", new PatternData("depths_angel0", length: 18000) },
+
+        { "bp_depths_angel0", new PatternData("depths_angel0", true) },
+        { "bp_depths_angel0_pt2", new PatternData("depths_angel0", true) },
+        { "bp_depths_angel0_pt4", new PatternData("depths_angel0", true) },
+        { "bp_depths_angel0_pt5", new PatternData("depths_angel0", true) },
+        { "bp_depths_angel0_pt6", new PatternData("depths_angel0", true) },
+        { "bp_depths_angel0_pt7", new PatternData("depths_angel0", true) },
 
         // nest
         { "bp_bird_student0_s", new PatternData("bird_student0") },
@@ -1168,6 +1218,13 @@ public class BDLookup {
         { "geode_moth0", new EnemyData(Stage.GEODE) },
         { "geode_moth1", new EnemyData(Stage.GEODE) },
         { "geode_moth2", new EnemyData(Stage.GEODE) },
+
+        // darkhouse
+        { "depths_basilisk0", new EnemyData(Stage.DARKHOUSE, 0.9) },
+        { "depths_basilisk1", new EnemyData(Stage.DARKHOUSE, 0.9) },
+        { "depths_beast0", new EnemyData(Stage.DARKHOUSE, 0.9) },
+        { "depths_beast1", new EnemyData(Stage.DARKHOUSE, 0.9) },
+        { "depths_angel0", new EnemyData(Stage.DARKHOUSE, 0.7, false, Anims.Center) },
     };
 
     private struct DiffRedirectMapMaker {
@@ -1235,6 +1292,9 @@ public class BDLookup {
             ( "bp_frog_painter0_pt3", [null, null, "bp_frog_painter0_pt3_l", "bp_frog_painter0_pt3_l"]),
 
             ( "bp_frog_idol1_pt7", [null, null, "bp_frog_idol1_pt7_h", "bp_frog_idol1_pt7_h"]),
+
+            ( "bp_depths_angel0_pt2_s", [null, null, "bp_depths_angel0_pt2_sh", "bp_depths_angel0_pt2_sh"]),
+            ( "bp_depths_angel0_pt2", [null, null, "bp_depths_angel0_pt2_h", "bp_depths_angel0_pt2_h"]),
         };
 
         public static Dictionary<string, DiffRedirect> Create() {
