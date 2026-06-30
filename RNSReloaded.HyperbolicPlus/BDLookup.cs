@@ -264,6 +264,40 @@ public class BDLookup {
         { "SpellManifest_5M", "bp_aurum_ghost0_pt6" },
         { "SpellManifest_6M", "bp_aurum_ghost0_pt7" },
 
+        { "Asha1_1S", "bp_aurum_blackcat0_pt2_s" },
+        { "Asha1_2S", "bp_aurum_blackcat0_pt3_s" },
+        { "Asha1_3S", "bp_aurum_blackcat0_pt4_s" },
+        { "Asha1_4S", "bp_aurum_blackcat0_pt5_s" },
+        { "Asha1_5S", "bp_aurum_blackcat0_pt6_s" },
+        { "Asha1_6S", "bp_aurum_blackcat0_pt7_s" },
+
+        { "Asha1_1M", "bp_aurum_blackcat0_pt2" },
+        { "Asha1_2M", "bp_aurum_blackcat0_pt3" },
+        { "Asha1_3M", "bp_aurum_blackcat0_pt4" },
+        { "Asha1_4M", "bp_aurum_blackcat0_pt5" },
+        { "Asha1_5M", "bp_aurum_blackcat0_pt6" },
+        { "Asha1_6M", "bp_aurum_blackcat0_pt7" },
+
+        { "Asha2_1S", "bp_aurum_blackcat1_pt2_s" },
+        { "Asha2_2S", "bp_aurum_blackcat1_pt3_s" },
+        { "Asha2_3S", "bp_aurum_blackcat1_pt4_s" },
+        { "Asha2_4S", "bp_aurum_blackcat1_pt5_s" },
+        { "Asha2_GarnetS", "bp_aurum_blackcat1_y_s" },
+        { "Asha2_SapphireS", "bp_aurum_blackcat1_b_s" },
+        { "Asha2_RubyS", "bp_aurum_blackcat1_r_s" },
+        { "Asha2_OpalS", "bp_aurum_blackcat1_p_s" },
+        { "Asha2_EmeraldS", "bp_aurum_blackcat1_g_s" },
+
+        { "Asha2_1M", "bp_aurum_blackcat1_pt2" },
+        { "Asha2_2M", "bp_aurum_blackcat1_pt3" },
+        { "Asha2_3M", "bp_aurum_blackcat1_pt4" },
+        { "Asha2_4M", "bp_aurum_blackcat1_pt5" },
+        { "Asha2_GarnetM", "bp_aurum_blackcat1_y" },
+        { "Asha2_SapphireM", "bp_aurum_blackcat1_b" },
+        { "Asha2_RubyM", "bp_aurum_blackcat1_r" },
+        { "Asha2_OpalM", "bp_aurum_blackcat1_p" },
+        { "Asha2_EmeraldM", "bp_aurum_blackcat1_g" },
+
         // nest
         { "Menna1_S", "bp_bird_student0_s" },
         { "Menna2_S", "bp_bird_student1_s" },
@@ -773,6 +807,40 @@ public class BDLookup {
         { "bp_aurum_ghost0_pt5", new PatternData("aurum_ghost0", true) },
         { "bp_aurum_ghost0_pt6", new PatternData("aurum_ghost0", true, length: 999999999) },
         { "bp_aurum_ghost0_pt7", new PatternData("aurum_ghost0", true) },
+
+        { "bp_aurum_blackcat0_pt2_s", new PatternData("aurum_blackcat0") }, // no timer needed
+        { "bp_aurum_blackcat0_pt3_s", new PatternData("aurum_blackcat0", length: 12000) },
+        { "bp_aurum_blackcat0_pt4_s", new PatternData("aurum_blackcat0", length: 17000) },
+        { "bp_aurum_blackcat0_pt5_s", new PatternData("aurum_blackcat0", length: 16000) },
+        { "bp_aurum_blackcat0_pt6_s", new PatternData("aurum_blackcat0", length: 20000) },
+        { "bp_aurum_blackcat0_pt7_s", new PatternData("aurum_blackcat0", length: 22000) },
+
+        { "bp_aurum_blackcat0_pt2", new PatternData("aurum_blackcat0", true) },
+        { "bp_aurum_blackcat0_pt3", new PatternData("aurum_blackcat0", true) },
+        { "bp_aurum_blackcat0_pt4", new PatternData("aurum_blackcat0", true) },
+        { "bp_aurum_blackcat0_pt5", new PatternData("aurum_blackcat0", true) },
+        { "bp_aurum_blackcat0_pt6", new PatternData("aurum_blackcat0", true) },
+        { "bp_aurum_blackcat0_pt7", new PatternData("aurum_blackcat0", true) },
+
+        { "bp_aurum_blackcat1_pt2_s", new PatternData("aurum_blackcat1", length: 17000) },
+        { "bp_aurum_blackcat1_pt3_s", new PatternData("aurum_blackcat1", length: 19000) },
+        { "bp_aurum_blackcat1_pt4_s", new PatternData("aurum_blackcat1", length: 19000) },
+        { "bp_aurum_blackcat1_pt5_s", new PatternData("aurum_blackcat1", length: 19000) },
+        { "bp_aurum_blackcat1_y_s", new PatternData("aurum_blackcat1", length: 20000) },
+        { "bp_aurum_blackcat1_b_s", new PatternData("aurum_blackcat1", length: 20000) },
+        { "bp_aurum_blackcat1_r_s", new PatternData("aurum_blackcat1", length: 20000) },
+        { "bp_aurum_blackcat1_p_s", new PatternData("aurum_blackcat1", length: 20000) },
+        { "bp_aurum_blackcat1_g_s", new PatternData("aurum_blackcat1", length: 20000) },
+
+        { "bp_aurum_blackcat1_pt2", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_pt3", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_pt4", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_pt5", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_y", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_b", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_r", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_p", new PatternData("aurum_blackcat1", true) },
+        { "bp_aurum_blackcat1_g", new PatternData("aurum_blackcat1", true) },
 
         // nest
         { "bp_bird_student0_s", new PatternData("bird_student0") },
@@ -1354,6 +1422,8 @@ public class BDLookup {
         { "aurum_beast0", new EnemyData(Stage.ATELIER, 0.85) },
         { "aurum_beast1", new EnemyData(Stage.ATELIER, 0.85) },
         { "aurum_ghost0", new EnemyData(Stage.ATELIER, 0.9, false, Anims.SpellManifest) },
+        { "aurum_blackcat0", new EnemyData(Stage.ATELIER, 0.9, false, music: Music.ASHAMUSIC) },
+        { "aurum_blackcat1", new EnemyData(Stage.ATELIER, 0.8, false, Anims.Asha, Music.ASHAMUSIC) },
     };
 
     private struct DiffRedirectMapMaker {
