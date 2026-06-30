@@ -62,6 +62,22 @@ public unsafe class Mod : IMod {
         "scr_kotracker_can_revive",
         "scr_kotracker_draw_timer"
     ];
+    private static readonly string[] SPELL_MANIFEST_PATTERNS = [
+        "bp_aurum_ghost0_pt2_s",
+        "bp_aurum_ghost0_pt3_s",
+        "bp_aurum_ghost0_pt4_s",
+        "bp_aurum_ghost0_pt5_s",
+        "bp_aurum_ghost0_pt6_s",
+        "bp_aurum_ghost0_pt7_s",
+        "bp_aurum_ghost0_pt8_s",
+        "bp_aurum_ghost0_pt2",
+        "bp_aurum_ghost0_pt3",
+        "bp_aurum_ghost0_pt4",
+        "bp_aurum_ghost0_pt5",
+        "bp_aurum_ghost0_pt6",
+        "bp_aurum_ghost0_pt7",
+        "bp_aurum_ghost0_pt8",
+    ];
 
     private IHook<ScriptDelegate>? enemyHookS;
     private IHook<ScriptDelegate>? enemyHookM;
@@ -153,6 +169,7 @@ public unsafe class Mod : IMod {
             { "scr_hallwaygen_toybox", this.CreateHallwayDetour("scr_hallwaygen_toybox", NotchType.ToyboxIntro)},
             // enrage control
             { "bpsw_enrage_time", this.EnrageTimeDetour},
+            { "bp_enrage", this.EnrageDetour},
             // invuln control
             { "bp_rabbit_queen1_steel_activate", this.SteelActivateDetour}, // always active
             { "scr_pattern_deal_damage_ally", this.PlayerDmgDetour},
@@ -167,6 +184,10 @@ public unsafe class Mod : IMod {
             { "scr_kotracker_can_revive", this.ReviveDetour},
             { "scr_kotracker_draw_timer", this.KOTimerDetour},
         };
+
+        foreach (var pattern in SPELL_MANIFEST_PATTERNS) {
+            detourMap[pattern] = this.CreateSpellManifestPatternDetour(pattern);
+        }
 
         foreach (var detourPair in detourMap) {
             this.CreateAndEnableHook(detourPair.Key, detourPair.Value, out var hook);
@@ -272,6 +293,16 @@ public unsafe class Mod : IMod {
                     argv = [animName, new RValue(500), new RValue(2.80), new RValue(0.75)];
                     rnsReloaded.ExecuteScript("scrbp_transform_animation", self, other, argv);
                     break;
+                case Anims.Asha:
+                    animName = new RValue(0);
+                    rnsReloaded.CreateString(&animName, "anim_aurum_blackcat_big");
+                    argv = [animName, new RValue(300), new RValue(1.80), new RValue(0.60)];
+                    rnsReloaded.ExecuteScript("scrbp_transform_animation", self, other, argv);
+                    break;
+                case Anims.SpellManifest:
+                    rnsReloaded.ExecuteScript("scrbp_move_character_absolute", self, other, [new RValue(960), new RValue(540), new RValue(0), new RValue(1)]);
+                    break;
+
             }
         }
     }
@@ -499,6 +530,37 @@ public unsafe class Mod : IMod {
     private RValue* EnrageTimeDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
         var a = new RValue(-1);
         return &a;
+    }
+
+    // for whatever reason spell manifest enrages regardless of the other enrage blocker
+    private RValue* EnrageDetour(CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) {
+        if (BattleData.enemy == "aurum_ghost0") {
+            return returnValue;
+        }
+
+        var hook = ScriptHooks["bp_enrage"];
+        return hook.OriginalFunction(self, other, returnValue, argc, argv);
+    }
+
+    // spell manifest patterns, unlike regular patterns, do not follow the base enemy script, instead they follow a pattern of
+    // damage spell manifest -> split into four -> repeat
+    // the issue is the split into four parts, hyperbolicplus breaks on those if we don't do anything, it just never repeats
+    // we deal with this by overwriting calls to damage spell manifest and making them just repeat the split into four patterns
+    // for more info, see https://discord.com/channels/496640298844422149/1239731124952105100/1521433018189877319
+    private ScriptDelegate CreateSpellManifestPatternDetour(string pattern) {
+        return (CInstance* self, CInstance* other, RValue* returnValue, int argc, RValue** argv) => {
+            string selectedPattern = BattleData.GetRealPattern(this.diff);
+            if (BattleData.enemy == "aurum_ghost0" && pattern != selectedPattern) {
+                if (ScriptHooks.TryGetValue(selectedPattern, out var selectedHook)) {
+                    return selectedHook.OriginalFunction(self, other, returnValue, argc, argv);
+                }
+
+                return returnValue;
+            }
+
+            var hook = ScriptHooks[pattern];
+            return hook.OriginalFunction(self, other, returnValue, argc, argv);
+        };
     }
 
     // INVULN CONTROL

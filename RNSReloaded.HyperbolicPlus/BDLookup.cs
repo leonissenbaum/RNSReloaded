@@ -27,7 +27,8 @@ public enum Stage {
     KEEP = 7,
     PINNACLE = 8,
     GEODE = 9,
-    DARKHOUSE = 11
+    DARKHOUSE = 11,
+    ATELIER = 12,
 }
 
 public enum Music {
@@ -36,7 +37,8 @@ public enum Music {
     MYSTERIOUSBATTLE = 10,
     VALIANTBATTLE = 11,
     MOONLITPINACLE = 12,
-    FARRAHMUSIC = 19
+    FARRAHMUSIC = 19,
+    ASHAMUSIC = 21
 }
 
 public enum Anims {
@@ -51,6 +53,8 @@ public enum Anims {
     Avy,
     Shira,
     Farrah,
+    Asha,
+    SpellManifest,
 }
 
 public enum Mixes {
@@ -234,6 +238,31 @@ public class BDLookup {
         { "Farrah2_6M", "bp_depths_hound1_pt8" },
         { "Farrah2_7M", "bp_depths_hound1_pt5" },
         { "Farrah2_8M", "bp_depths_hound1_pt9" },
+
+        // atelier
+        { "Stella1_S", "bp_aurum_whitecat0_s" },
+        { "Stella2_S", "bp_aurum_whitecat1_s" },
+        { "Scorpio1_S", "bp_aurum_beast0_s" },
+        { "Scorpio2_S", "bp_aurum_beast1_s" },
+
+        { "Stella1_M", "bp_aurum_whitecat0" },
+        { "Stella2_M", "bp_aurum_whitecat1" },
+        { "Scorpio1_M", "bp_aurum_beast0" },
+        { "Scorpio2_M", "bp_aurum_beast1" },
+
+        { "SpellManifest_1S", "bp_aurum_ghost0_pt2_s" },
+        { "SpellManifest_2S", "bp_aurum_ghost0_pt3_s" },
+        { "SpellManifest_3S", "bp_aurum_ghost0_pt4_s" },
+        { "SpellManifest_4S", "bp_aurum_ghost0_pt5_s" },
+        { "SpellManifest_5S", "bp_aurum_ghost0_pt6_s" },
+        { "SpellManifest_6S", "bp_aurum_ghost0_pt7_s" },
+
+        { "SpellManifest_1M", "bp_aurum_ghost0_pt2" },
+        { "SpellManifest_2M", "bp_aurum_ghost0_pt3" },
+        { "SpellManifest_3M", "bp_aurum_ghost0_pt4" },
+        { "SpellManifest_4M", "bp_aurum_ghost0_pt5" },
+        { "SpellManifest_5M", "bp_aurum_ghost0_pt6" },
+        { "SpellManifest_6M", "bp_aurum_ghost0_pt7" },
 
         // nest
         { "Menna1_S", "bp_bird_student0_s" },
@@ -719,6 +748,31 @@ public class BDLookup {
         { "bp_depths_hound1_pt7", new PatternData("depths_hound1", true) },
         { "bp_depths_hound1_pt8", new PatternData("depths_hound1", true) },
         { "bp_depths_hound1_pt9", new PatternData("depths_hound1", true) },
+
+        // atelier
+        { "bp_aurum_whitecat0_s", new PatternData("aurum_whitecat0") },
+        { "bp_aurum_whitecat1_s", new PatternData("aurum_whitecat1") },
+        { "bp_aurum_beast0_s", new PatternData("aurum_beast0") },
+        { "bp_aurum_beast1_s", new PatternData("aurum_beast1") },
+
+        { "bp_aurum_whitecat0", new PatternData("aurum_whitecat0", true) },
+        { "bp_aurum_whitecat1", new PatternData("aurum_whitecat1", true) },
+        { "bp_aurum_beast0", new PatternData("aurum_beast0", true) },
+        { "bp_aurum_beast1", new PatternData("aurum_beast1", true) },
+
+        { "bp_aurum_ghost0_pt2_s", new PatternData("aurum_ghost0", length: 999999999) }, // this attack lasts forever
+        { "bp_aurum_ghost0_pt3_s", new PatternData("aurum_ghost0") },
+        { "bp_aurum_ghost0_pt4_s", new PatternData("aurum_ghost0", length: 999999999) },
+        { "bp_aurum_ghost0_pt5_s", new PatternData("aurum_ghost0") },
+        { "bp_aurum_ghost0_pt6_s", new PatternData("aurum_ghost0", length: 999999999) },
+        { "bp_aurum_ghost0_pt7_s", new PatternData("aurum_ghost0") },
+
+        { "bp_aurum_ghost0_pt2", new PatternData("aurum_ghost0", true, length: 999999999) },
+        { "bp_aurum_ghost0_pt3", new PatternData("aurum_ghost0", true) },
+        { "bp_aurum_ghost0_pt4", new PatternData("aurum_ghost0", true, length: 999999999) },
+        { "bp_aurum_ghost0_pt5", new PatternData("aurum_ghost0", true) },
+        { "bp_aurum_ghost0_pt6", new PatternData("aurum_ghost0", true, length: 999999999) },
+        { "bp_aurum_ghost0_pt7", new PatternData("aurum_ghost0", true) },
 
         // nest
         { "bp_bird_student0_s", new PatternData("bird_student0") },
@@ -1293,6 +1347,13 @@ public class BDLookup {
         { "depths_angel0", new EnemyData(Stage.DARKHOUSE, 0.7, false, Anims.Center) },
         { "depths_hound0", new EnemyData(Stage.DARKHOUSE, 0.9, false, music: Music.FARRAHMUSIC) },
         { "depths_hound1", new EnemyData(Stage.DARKHOUSE, 0.8, false, Anims.Farrah, music: Music.FARRAHMUSIC) },
+
+        // atelier
+        { "aurum_whitecat0", new EnemyData(Stage.ATELIER, 0.9) },
+        { "aurum_whitecat1", new EnemyData(Stage.ATELIER, 0.9) },
+        { "aurum_beast0", new EnemyData(Stage.ATELIER, 0.85) },
+        { "aurum_beast1", new EnemyData(Stage.ATELIER, 0.85) },
+        { "aurum_ghost0", new EnemyData(Stage.ATELIER, 0.9, false, Anims.SpellManifest) },
     };
 
     private struct DiffRedirectMapMaker {

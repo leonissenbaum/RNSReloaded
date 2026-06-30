@@ -450,6 +450,31 @@ public class Config : Configurable<Config> {
         Farrah2_7M,
         Farrah2_8M,
 
+        // atelier
+        Stella1_S,
+        Stella2_S,
+        Scorpio1_S,
+        Scorpio2_S,
+
+        Stella1_M,
+        Stella2_M,
+        Scorpio1_M,
+        Scorpio2_M,
+
+        SpellManifest_1S,
+        SpellManifest_2S,
+        SpellManifest_3S,
+        SpellManifest_4S,
+        SpellManifest_5S,
+        SpellManifest_6S,
+
+        SpellManifest_1M,
+        SpellManifest_2M,
+        SpellManifest_3M,
+        SpellManifest_4M,
+        SpellManifest_5M,
+        SpellManifest_6M,
+
         // mixes
         Twili1_Mix_S,
         Twili2_Mix_S,
